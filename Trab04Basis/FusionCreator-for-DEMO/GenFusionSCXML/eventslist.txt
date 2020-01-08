@@ -1,0 +1,6 @@
+[color][RED]
+[shape][TRIANGLE]
+[color][YELLOW]
+[shape][SQUARE]
+[shape][CIRCLE]
+[color][BLUE]
