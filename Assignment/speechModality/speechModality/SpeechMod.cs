@@ -61,7 +61,7 @@ namespace speechModality
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
             string json = "{ \"recognized\": [";
             //json += "\"" + e.Result.Confidence + "\", ";
-//          if e.Result.Confidence
+            //if (e.Result.Confidence > 0.65)
             foreach (var resultSemantic in e.Result.Semantics)
             {
                 json+= "\"" + resultSemantic.Value.Value +"\", ";
