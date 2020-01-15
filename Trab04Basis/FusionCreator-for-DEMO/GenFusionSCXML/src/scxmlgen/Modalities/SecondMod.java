@@ -8,10 +8,10 @@ import scxmlgen.interfaces.IModality;
  */
 public enum SecondMod implements IModality{
 
-    RED("[color][RED]",1500),
-    BLUE("[color][BLUE]",1500),
-    YELLOW("[color][YELLOW]",1500);
-    ;
+    EsvaziarC("[action][EsvaziarC]",1500),
+    RecuarR("[action][RecuarR]",1500),
+    AvancarL("[action][AvancarL]",1500),
+	VerC("[action][VerC]",1500);
     
     private String event;
     private int timeout;
