@@ -14,8 +14,11 @@ public enum Output implements IOutput{
 	MCDONALDS_UNIVERSIDADE("[restaurant][mcdonalds][place][UNIVERSIDADE]"),
 	MONTADITOS("[restaurant][montaditos]"),
 	SIM("[action][SIM]"),
-	NAO("[action][NAO]");
-    
+	NAO("[action][NAO]"),
+	scrollUpDevagar("[action][scrollUpDevagar]"),
+	scrollUpRapido("[action][scrollUpDevagar]"),
+	scrollDownRapido("[action][scrollDownRapido]"),
+	scrollDownDevagar("[action][scrollDownDevagar]"),;    
     
     
     private String event;

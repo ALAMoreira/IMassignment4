@@ -92,6 +92,15 @@
         Voltar<tag>out="return"</tag>
       </item>
       <item repeat="0-1">
+        avançar<tag>out="avancar"</tag>
+      </item>
+      <item repeat="0-1">
+        devagar<tag>out="devagar"</tag>
+      </item>
+      <item repeat="0-1">
+        rapido<tag>out="rapido"</tag>
+      </item>
+      <item repeat="0-1">
         encomendar<tag>out="procura"</tag>
       </item>
       <item repeat="0-1">

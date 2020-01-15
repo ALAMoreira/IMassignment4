@@ -469,14 +469,25 @@ namespace AppGui
             }
         }
 
-        private void scrollSmooth()
+        private void scrollFast()
+        {
+            while (true)
+            {
+                if (direcao == "cima")
+                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,-3)", "");
+                else if (direcao == "baixo")
+                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,3)", ""); 
+            }
+        }
+
+        private void scrollSlow()
         {
             while (true)
             {
                 if (direcao == "cima")
                     ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,-1)", "");
                 else if (direcao == "baixo")
-                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,1)", ""); 
+                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,1)", "");
             }
         }
 
