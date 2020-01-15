@@ -9,10 +9,10 @@ import scxmlgen.interfaces.IModality;
 public enum SecondMod implements IModality{
 
     EsvaziarC("[1][esvaziarC]",3000),
-    RecuarR("[1][RecuarR]",3000),
+    RecuarR("[2][RecuarR]",3000),
 	AvancarL("[0][AvancarL]",3000),
     scrollU("[4][ScrollU]",3000),
-	scrollDR("[3][scrollDR]",3000);
+	scrollDR("[3][ScrollDR]",3000);
     
     private String event;
     private int timeout;

@@ -74,8 +74,15 @@ namespace AppGui
             dynamic json = JsonConvert.DeserializeObject(com);
 
 
+
+            //var com2 = doc.Descendants("mmi:data").FirstOrDefault().Value;
+
+            int sizeJson = com.Split(',').Length - 1;
+
             var confirmation = (string)json.recognized[1].ToString();
+
             //double confidence = double.Parse(json.recognized[2].ToString());
+
 
             switch (confirmation) //confimation
             {
@@ -117,272 +124,272 @@ namespace AppGui
                     break;
             }
             
-            
+            if(sizeJson > 3) { 
 
-            if ((string)json.recognized[0].ToString() == "KEY")
-            {
-                orderStart = true;
-                t.Speak("Olá! O que gostaria de fazer?");
-            }
-            else if ((string)json.recognized[0].ToString() == "EXIT")
-            {
-                t.Speak("Tem a certeza que deseja sair?");
-                leaving = true;
-            }
-
-            if (leaving == true)
-            {
-                confirmation = (string)json.recognized[7].ToString();
-                switch (confirmation) //confimation
+                if ((string)json.recognized[0].ToString() == "KEY")
                 {
-                    case "":
-                        break;
-                    case "sim":
-                        sairAplicacao();
-                        break;
-                    case "nao":
-                        leaving = false;
-                        break;
-                    default:
-                        t.Speak("Não percebi");
-                        break;
+                    orderStart = true;
+                    t.Speak("Olá! O que gostaria de fazer?");
                 }
-            }
+                else if ((string)json.recognized[0].ToString() == "EXIT")
+                {
+                    t.Speak("Tem a certeza que deseja sair?");
+                    leaving = true;
+                }
 
-            if (orderStart)
-            {
-               
-                switch ((string)json.recognized[1].ToString())
+                if (leaving == true)
+                {
+                    confirmation = (string)json.recognized[7].ToString();
+                    switch (confirmation) //confimation
+                    {
+                        case "":
+                            break;
+                        case "sim":
+                            sairAplicacao();
+                            break;
+                        case "nao":
+                            leaving = false;
+                            break;
+                        default:
+                            t.Speak("Não percebi");
+                            break;
+                    }
+                }
+
+                if (orderStart)
                 {
 
-                    case "scroll":
-                        scrollFast();
-                        break;
-                    case "search":
-                        t.Speak("O que deseja procurar?");
-                        break;
-                    case "return":
-                        homepage();
-                        break;
+                    switch ((string)json.recognized[1].ToString())
+                    {
 
-                    case "addtocart":
-                        /*action = "Adiciona";
-                        driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]").Click();
-                        */
-                        adicionarCarrinho();
-                        t.Speak("Adicionado ao carrinho com sucesso!");
-                        break;
+                        case "scroll":
+                            scrollFast();
+                            break;
+                        case "search":
+                            t.Speak("O que deseja procurar?");
+                            break;
+                        case "return":
+                            homepage();
+                            break;
 
-                    case "changedate":
-                        /*action = "Entregar agora";
-                        //driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
-                        driver.FindElement(By.CssSelector("button[class='ao aq bi bj bk ah b2'")).Click();
-                        action = "Agendar para mais tarde";
-                        driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
+                        case "addtocart":
+                            /*action = "Adiciona";
+                            driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]").Click();
+                            */
+                            adicionarCarrinho();
+                            t.Speak("Adicionado ao carrinho com sucesso!");
+                            break;
+
+                        case "changedate":
+                            /*action = "Entregar agora";
+                            //driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
+                            driver.FindElement(By.CssSelector("button[class='ao aq bi bj bk ah b2'")).Click();
+                            action = "Agendar para mais tarde";
+                            driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
                         
-                        // Adicionar switch para opções
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        action = "Definir hora de entrega";
-                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(text(), '" + action + "')]")));
-                        driver.FindElementByXPath("//button[contains(text(), '" + action + "')]").Click();
-                        driver.Navigate().Refresh();
-                        */
-                        changeDate();
+                            // Adicionar switch para opções
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                            action = "Definir hora de entrega";
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(text(), '" + action + "')]")));
+                            driver.FindElementByXPath("//button[contains(text(), '" + action + "')]").Click();
+                            driver.Navigate().Refresh();
+                            */
+                            changeDate();
 
-                        t.Speak("Ok, a data de entrega foi alterada!");
-                        break;
+                            t.Speak("Ok, a data de entrega foi alterada!");
+                            break;
 
-                    case "viewcart":
-                        /*//driver.Navigate().Refresh();
-                        cartClicked = !cartClicked;
-                        if (!cartClicked)
-                        {
-                            driver.FindElementByXPath("//button[@aria-label='checkout']").Click();
-                        }
-                        */
-                        verCarrinho();
-                        t.Speak("Aqui tem o seu carrinho!");
-                        break;
-                    case "closecart":
-                        //driver.FindElementByCssSelector("button[class='af eh ei ej ek el em ao aq dt b2']").Click();
-                        fecharCarrinho();
-                        t.Speak("O carrinho foi fechado com sucesso!");
-                        break;
-                    default:
-                        break;
+                        case "viewcart":
+                            /*//driver.Navigate().Refresh();
+                            cartClicked = !cartClicked;
+                            if (!cartClicked)
+                            {
+                                driver.FindElementByXPath("//button[@aria-label='checkout']").Click();
+                            }
+                            */
+                            verCarrinho();
+                            t.Speak("Aqui tem o seu carrinho!");
+                            break;
+                        case "closecart":
+                            //driver.FindElementByCssSelector("button[class='af eh ei ej ek el em ao aq dt b2']").Click();
+                            fecharCarrinho();
+                            t.Speak("O carrinho foi fechado com sucesso!");
+                            break;
+                        default:
+                            break;
+                    }
+
+                    string place, restaurante;
+                    bool enviar = false, local = false;
+
+                    switch ((string)json.recognized[2].ToString()) //restaurants
+                    {
+
+                        case "MCDONALDS":
+                            //search mcdonalds
+                            /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                            var searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
+                            for (int i = 0; i < 20; i++)
+                            {
+                                searchBox.SendKeys(Keys.Backspace);
+                            }
+                            searchBox.SendKeys("mcdonalds ");*/
+
+                            restaurante = "mcdonalds ";
+                            enviar = false; local = false;
+                            procurar(restaurante, enviar, local);
+
+                            switch ((string)json.recognized[3].ToString()) //place
+                            {
+                                case "UNIVERSIDADE":
+                                    place = "(Aveiro Universidade)";
+                                    /*searchBox.SendKeys("universidade");
+                                    searchBox.SendKeys(Keys.Enter);*/
+
+                                    //t.Speak("Carregue no botão");
+
+                                    /*wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                                    driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                                    enviar = true; local = true;
+                                    procurar(place, enviar, local);
+                                    verRestaurante(place);
+                                    break;
+                                case "FORUM":
+                                    place = "(Aveiro Fórum)";
+                                    /*searchBox.SendKeys("fórum");
+                                    searchBox.SendKeys(Keys.Enter);
+
+                                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                                    driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
+                                    */
+                                    enviar = true; local = true;
+                                    procurar(place, enviar, local);
+                                    verRestaurante(place);
+                                    break;
+                                case "GLICINIAS":
+                                    place = "(Aveiro Glicinias)";
+                                    /*searchBox.SendKeys("glicinias");
+                                    searchBox.SendKeys(Keys.Enter);
+
+                                    wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                                    driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                                    enviar = true; local = true;
+                                    procurar(place, enviar, local);
+                                    verRestaurante(place);
+                                    break;
+                                case "":
+                                    place = "";
+                                    enviar = true; local = true;
+                                    procurar(place, enviar, local);
+                                    //tts escolha a opção desejada
+                                    break;
+                            }
+
+                            if ((string)json.recognized[3].ToString() == "")
+                            {
+                                t.Speak("De qual restaurante?");
+                            }
+                            else
+                            {
+                                t.Speak("Que produto quer adquirir?");
+                            }
+
+                            break;
+                        case "MONTADITOS":
+                            /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                            searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
+                            for (int i = 0; i < 20; i++)
+                            {
+                                searchBox.SendKeys(Keys.Backspace);
+                            }
+                            searchBox.SendKeys("100 montaditos ");
+
+                            searchBox.SendKeys(Keys.Enter);
+
+                            place = "100 Montaditos";
+
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                            driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                            place = "100 Montaditos";
+                            enviar = true; local = false;
+                            procurar(place, enviar, local);
+                            verRestaurante(place);
+                            break;
+                        case "PIZZAHUT":
+                            /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                            searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
+                            for (int i = 0; i < 20; i++)
+                            {
+                                searchBox.SendKeys(Keys.Backspace);
+                            }
+                            searchBox.SendKeys("pizza hut ");
+
+                            searchBox.SendKeys(Keys.Enter);
+
+
+                            place = "Pizza Hut";
+
+                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                            driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+
+                            place = "Pizza Hut";
+                            enviar = true; local = false;
+                            procurar(place, enviar, local);
+                            verRestaurante(place);
+                            break;
+                    }
+
+
+                    switch ((string)json.recognized[4].ToString()) //options
+                    {
+
+                        case "":
+                            break;
+                        case ".":
+                            //search mcdonalds
+                            //pergunta ao user o que quer?
+                            break;
+                        case "-":
+
+                            break;
+                        case "-.":
+
+                            break;
+                    }
+
+                    switch ((string)json.recognized[5].ToString()) //food on mcdonalds
+                    {
+                        case "":
+                            break;
+                        default:
+
+                            var food = (string)json.recognized[5].ToString();
+                            //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + food + "')]")));
+
+                            //driver.FindElementByXPath("//*[contains(text(), '" + food + "')]").Click();
+                            //t.Speak("Deseja alterar o seu pedido?");
+                            foodRestaurant(food);
+                            break;
+                    }
+
+                    string itemName = "";
+                    switch ((string)json.recognized[6].ToString()) //food options on mcdonalds
+                    {
+                        case "":
+                            break;
+                        default:
+                            itemName = (string)json.recognized[6].ToString();
+
+                            foodOptions(itemName);
+                            break;
+                    }
                 }
-
-                string place, restaurante;
-                bool enviar = false, local = false;
-
-                switch ((string)json.recognized[2].ToString()) //restaurants
-                {
-
-                    case "MCDONALDS":
-                        //search mcdonalds
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
-                        var searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
-                        for (int i = 0; i < 20; i++)
-                        {
-                            searchBox.SendKeys(Keys.Backspace);
-                        }
-                        searchBox.SendKeys("mcdonalds ");*/
-
-                        restaurante = "mcdonalds ";
-                        enviar = false; local = false;
-                        procurar(restaurante, enviar, local);
-
-                        switch ((string)json.recognized[3].ToString()) //place
-                        {
-                            case "UNIVERSIDADE":
-                                place = "(Aveiro Universidade)";
-                                /*searchBox.SendKeys("universidade");
-                                searchBox.SendKeys(Keys.Enter);*/
-
-                                //t.Speak("Carregue no botão");
-
-                                /*wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
-                                enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
-                                break;
-                            case "FORUM":
-                                place = "(Aveiro Fórum)";
-                                /*searchBox.SendKeys("fórum");
-                                searchBox.SendKeys(Keys.Enter);
-
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
-                                */
-                                enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
-                                break;
-                            case "GLICINIAS":
-                                place = "(Aveiro Glicinias)";
-                                /*searchBox.SendKeys("glicinias");
-                                searchBox.SendKeys(Keys.Enter);
-
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
-                                enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
-                                break;
-                            case "":
-                                place = "";
-                                enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                //tts escolha a opção desejada
-                                break;
-                        }
-
-                        if ((string)json.recognized[3].ToString() == "")
-                        {
-                            t.Speak("De qual restaurante?");
-                        }
-                        else
-                        {
-                            t.Speak("Que produto quer adquirir?");
-                        }
-
-                        break;
-                    case "MONTADITOS":
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
-                        searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
-                        for (int i = 0; i < 20; i++)
-                        {
-                            searchBox.SendKeys(Keys.Backspace);
-                        }
-                        searchBox.SendKeys("100 montaditos ");
-
-                        searchBox.SendKeys(Keys.Enter);
-
-                        place = "100 Montaditos";
-
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
-                        place = "100 Montaditos";
-                        enviar = true; local = false;
-                        procurar(place, enviar, local);
-                        verRestaurante(place);
-                        break;
-                    case "PIZZAHUT":
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
-                        searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
-                        for (int i = 0; i < 20; i++)
-                        {
-                            searchBox.SendKeys(Keys.Backspace);
-                        }
-                        searchBox.SendKeys("pizza hut ");
-
-                        searchBox.SendKeys(Keys.Enter);
-
-
-                        place = "Pizza Hut";
-
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
-
-                        place = "Pizza Hut";
-                        enviar = true; local = false;
-                        procurar(place, enviar, local);
-                        verRestaurante(place);
-                        break;
-                }
-
-
-                switch ((string)json.recognized[4].ToString()) //options
-                {
-
-                    case "":
-                        break;
-                    case ".":
-                        //search mcdonalds
-                        //pergunta ao user o que quer?
-                        break;
-                    case "-":
-
-                        break;
-                    case "-.":
-
-                        break;
-                }
-
-                switch ((string)json.recognized[5].ToString()) //food on mcdonalds
-                {
-                    case "":
-                        break;
-                    default:
-
-                        var food = (string)json.recognized[5].ToString();
-                        //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + food + "')]")));
-
-                        //driver.FindElementByXPath("//*[contains(text(), '" + food + "')]").Click();
-                        //t.Speak("Deseja alterar o seu pedido?");
-                        foodRestaurant(food);
-                        break;
-                }
-
-                string itemName = "";
-                switch ((string)json.recognized[6].ToString()) //food options on mcdonalds
-                {
-                    case "":
-                        break;
-                    default:
-                        itemName = (string)json.recognized[6].ToString();
-
-                        foodOptions(itemName);
-                        break;
-                }
-
             }
     }
 

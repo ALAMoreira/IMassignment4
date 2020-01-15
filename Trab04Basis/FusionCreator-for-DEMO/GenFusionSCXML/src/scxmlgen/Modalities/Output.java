@@ -16,7 +16,7 @@ public enum Output implements IOutput{
 	SIM("[action][SIM]"),
 	NAO("[action][NAO]"),
 	scrollUpDevagar("[action][scrollUpDevagar]"),
-	scrollUpRapido("[action][scrollUpDevagar]"),
+	scrollUpRapido("[action][scrollUpRapido]"),
 	scrollDownRapido("[action][scrollDownRapido]"),
 	scrollDownDevagar("[action][scrollDownDevagar]"),;    
     
