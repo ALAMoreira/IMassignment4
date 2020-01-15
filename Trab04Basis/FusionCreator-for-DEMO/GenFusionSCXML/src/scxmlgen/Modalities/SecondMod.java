@@ -12,7 +12,9 @@ public enum SecondMod implements IModality{
     RecuarR("[2][RecuarR]",3000),
 	AvancarL("[0][AvancarL]",3000),
     scrollU("[4][ScrollU]",3000),
-	scrollDR("[3][ScrollDR]",3000);
+	scrollDR("[3][ScrollDR]",3000),
+	STOPSCROLL("[5][StopS]",3000),
+	VERCARRINHO("[6][verC]",3000),;
     
     private String event;
     private int timeout;

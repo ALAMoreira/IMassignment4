@@ -18,8 +18,10 @@ public enum Speech implements IModality{
 	RECUAR("[][return][][][][][][]",3000),
 	AVANCAR("[][avancar][][][][][][]",3000),
 	RAPIDO("[][rapido][][][][][][]",3000),
-	DEVAGAR("[][devagar][][][][][][]",3000),;
-
+	DEVAGAR("[][devagar][][][][][][]",3000),
+	STOPSCROLL("[][pararScroll][][][][][][]",3000),
+	VERCARRINHO("[][viewcart][][][][][][]",3000),;
+	
 private String event; 
 private int timeout;
 Speech(String m, int time) {

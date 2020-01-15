@@ -107,6 +107,9 @@
         Quero encomendar<tag>out="action1"</tag>
       </item>
       <item repeat="0-1">
+        Parar scroll<tag>out="pararScroll"</tag>
+      </item>
+      <item repeat="0-1">
         Desejo<tag>out="action2"</tag>
       </item>
       <item repeat="0-1">

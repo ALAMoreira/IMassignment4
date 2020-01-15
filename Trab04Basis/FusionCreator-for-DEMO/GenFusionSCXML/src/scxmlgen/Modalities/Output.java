@@ -18,7 +18,9 @@ public enum Output implements IOutput{
 	scrollUpDevagar("[action][scrollUpDevagar]"),
 	scrollUpRapido("[action][scrollUpRapido]"),
 	scrollDownRapido("[action][scrollDownRapido]"),
-	scrollDownDevagar("[action][scrollDownDevagar]"),;    
+	scrollDownDevagar("[action][scrollDownDevagar]"),
+	STOPSCROLL("[action][StopS]"),
+	VERCARRINHO("[action][verC]");    
     
     
     private String event;

@@ -15,12 +15,16 @@
       <log label="[main]" expr="READY" />
     </onentry>
     <transition target="ssecondmod[0][avancarl]" event="[0][AvancarL]" />
-    <transition target="sspeech[][devagar][][][][][][]" event="[][devagar][][][][][][]" />
-    <transition target="ssecondmod[3][scrolldr]" event="[3][ScrollDR]" />
+    <transition target="sspeech[][viewcart][][][][][][]" event="[][viewcart][][][][][][]" />
+    <transition target="ssecondmod[6][verc]" event="[6][verC]" />
     <transition target="sspeech[][avancar][][][][][][]" event="[][avancar][][][][][][]" />
     <transition target="sspeech[][return][][][][][][]" event="[][return][][][][][][]" />
+    <transition target="sspeech[][pararscroll][][][][][][]" event="[][pararScroll][][][][][][]" />
     <transition target="ssecondmod[4][scrollu]" event="[4][ScrollU]" />
+    <transition target="ssecondmod[3][scrolldr]" event="[3][ScrollDR]" />
+    <transition target="ssecondmod[5][stops]" event="[5][StopS]" />
     <transition target="sspeech[][rapido][][][][][][]" event="[][rapido][][][][][][]" />
+    <transition target="sspeech[][devagar][][][][][][]" event="[][devagar][][][][][][]" />
     <transition target="ssecondmod[2][recuarr]" event="[2][RecuarR]" />
   </state>
   <state id="ssecondmod[0][avancarl]">
@@ -52,65 +56,61 @@
     </onentry>
     <transition target="main" />
   </state>
-  <state id="sspeech[][devagar][][][][][][]">
+  <state id="sspeech[][viewcart][][][][][][]">
     <onentry>
-      <log label="[sspeech[][devagar][][][][][][]]" expr="READY" />
+      <log label="[sspeech[][viewcart][][][][][][]]" expr="READY" />
       <assign name="data1" expr="${_eventdata.data}" />
-      <send id="state1-timer-sspeech[][devagar][][][][][][]" event="timeout-sspeech[][devagar][][][][][][]" delay="3000" target="" targettype="" namelist="" />
+      <send id="state1-timer-sspeech[][viewcart][][][][][][]" event="timeout-sspeech[][viewcart][][][][][][]" delay="3000" target="" targettype="" namelist="" />
     </onentry>
-    <transition target="main" event="timeout-sspeech[][devagar][][][][][][]" />
-    <transition target="sspeech[][devagar][][][][][][]-secondmod[4][scrollu]" event="[4][ScrollU]" />
-    <transition target="sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]" event="[3][ScrollDR]" />
+    <transition target="speech[][viewcart][][][][][][]-final" event="timeout-sspeech[][viewcart][][][][][][]" />
+    <transition target="sspeech[][viewcart][][][][][][]-secondmod[6][verc]" event="[6][verC]" />
     <onexit>
-      <cancel sendid="state1-timer-sspeech[][devagar][][][][][][]" />
+      <cancel sendid="state1-timer-sspeech[][viewcart][][][][][][]" />
     </onexit>
   </state>
-  <state id="sspeech[][devagar][][][][][][]-secondmod[4][scrollu]">
+  <state id="speech[][viewcart][][][][][][]-final">
     <onentry>
-      <log label="[sspeech[][devagar][][][][][][]-secondmod[4][scrollu]]" expr="READY" />
-      <assign name="data2" expr="${_eventdata.data}" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollUpDevagar]')}" />
-      <send event="scrollUpDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
+      <log label="[speech[][viewcart][][][][][][]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[action][verC]')}" />
+      <send event="VERCARRINHO" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
-  <state id="sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]">
+  <state id="sspeech[][viewcart][][][][][][]-secondmod[6][verc]">
     <onentry>
-      <log label="[sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]]" expr="READY" />
+      <log label="[sspeech[][viewcart][][][][][][]-secondmod[6][verc]]" expr="READY" />
       <assign name="data2" expr="${_eventdata.data}" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownDevagar]')}" />
-      <send event="scrollDownDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][verC]')}" />
+      <send event="VERCARRINHO" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
-  <state id="ssecondmod[3][scrolldr]">
+  <state id="ssecondmod[6][verc]">
     <onentry>
-      <log label="[ssecondmod[3][scrolldr]]" expr="READY" />
+      <log label="[ssecondmod[6][verc]]" expr="READY" />
       <assign name="data1" expr="${_eventdata.data}" />
-      <send id="state1-timer-ssecondmod[3][scrolldr]" event="timeout-ssecondmod[3][scrolldr]" delay="3000" target="" targettype="" namelist="" />
+      <send id="state1-timer-ssecondmod[6][verc]" event="timeout-ssecondmod[6][verc]" delay="3000" target="" targettype="" namelist="" />
     </onentry>
-    <transition target="main" event="timeout-ssecondmod[3][scrolldr]" />
-    <transition target="ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]" event="[][devagar][][][][][][]" />
-    <transition target="ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]" event="[][rapido][][][][][][]" />
+    <transition target="secondmod[6][verc]-final" event="timeout-ssecondmod[6][verc]" />
+    <transition target="ssecondmod[6][verc]-speech[][viewcart][][][][][][]" event="[][viewcart][][][][][][]" />
     <onexit>
-      <cancel sendid="state1-timer-ssecondmod[3][scrolldr]" />
+      <cancel sendid="state1-timer-ssecondmod[6][verc]" />
     </onexit>
   </state>
-  <state id="ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]">
+  <state id="secondmod[6][verc]-final">
     <onentry>
-      <log label="[ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]]" expr="READY" />
-      <assign name="data2" expr="${_eventdata.data}" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownDevagar]')}" />
-      <send event="scrollDownDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
+      <log label="[secondmod[6][verc]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[action][verC]')}" />
+      <send event="VERCARRINHO" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
-  <state id="ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]">
+  <state id="ssecondmod[6][verc]-speech[][viewcart][][][][][][]">
     <onentry>
-      <log label="[ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]]" expr="READY" />
+      <log label="[ssecondmod[6][verc]-speech[][viewcart][][][][][][]]" expr="READY" />
       <assign name="data2" expr="${_eventdata.data}" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownRapido]')}" />
-      <send event="scrollDownRapido" target="IM" targettype="MC" namelist="newExtensionNotification" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][verC]')}" />
+      <send event="VERCARRINHO" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
@@ -172,6 +172,35 @@
     </onentry>
     <transition target="main" />
   </state>
+  <state id="sspeech[][pararscroll][][][][][][]">
+    <onentry>
+      <log label="[sspeech[][pararscroll][][][][][][]]" expr="READY" />
+      <assign name="data1" expr="${_eventdata.data}" />
+      <send id="state1-timer-sspeech[][pararscroll][][][][][][]" event="timeout-sspeech[][pararscroll][][][][][][]" delay="3000" target="" targettype="" namelist="" />
+    </onentry>
+    <transition target="speech[][pararscroll][][][][][][]-final" event="timeout-sspeech[][pararscroll][][][][][][]" />
+    <transition target="sspeech[][pararscroll][][][][][][]-secondmod[5][stops]" event="[5][StopS]" />
+    <onexit>
+      <cancel sendid="state1-timer-sspeech[][pararscroll][][][][][][]" />
+    </onexit>
+  </state>
+  <state id="speech[][pararscroll][][][][][][]-final">
+    <onentry>
+      <log label="[speech[][pararscroll][][][][][][]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[action][StopS]')}" />
+      <send event="STOPSCROLL" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="sspeech[][pararscroll][][][][][][]-secondmod[5][stops]">
+    <onentry>
+      <log label="[sspeech[][pararscroll][][][][][][]-secondmod[5][stops]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][StopS]')}" />
+      <send event="STOPSCROLL" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
   <state id="ssecondmod[4][scrollu]">
     <onentry>
       <log label="[ssecondmod[4][scrollu]]" expr="READY" />
@@ -203,6 +232,66 @@
     </onentry>
     <transition target="main" />
   </state>
+  <state id="ssecondmod[3][scrolldr]">
+    <onentry>
+      <log label="[ssecondmod[3][scrolldr]]" expr="READY" />
+      <assign name="data1" expr="${_eventdata.data}" />
+      <send id="state1-timer-ssecondmod[3][scrolldr]" event="timeout-ssecondmod[3][scrolldr]" delay="3000" target="" targettype="" namelist="" />
+    </onentry>
+    <transition target="main" event="timeout-ssecondmod[3][scrolldr]" />
+    <transition target="ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]" event="[][devagar][][][][][][]" />
+    <transition target="ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]" event="[][rapido][][][][][][]" />
+    <onexit>
+      <cancel sendid="state1-timer-ssecondmod[3][scrolldr]" />
+    </onexit>
+  </state>
+  <state id="ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]">
+    <onentry>
+      <log label="[ssecondmod[3][scrolldr]-speech[][devagar][][][][][][]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownDevagar]')}" />
+      <send event="scrollDownDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]">
+    <onentry>
+      <log label="[ssecondmod[3][scrolldr]-speech[][rapido][][][][][][]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownRapido]')}" />
+      <send event="scrollDownRapido" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="ssecondmod[5][stops]">
+    <onentry>
+      <log label="[ssecondmod[5][stops]]" expr="READY" />
+      <assign name="data1" expr="${_eventdata.data}" />
+      <send id="state1-timer-ssecondmod[5][stops]" event="timeout-ssecondmod[5][stops]" delay="3000" target="" targettype="" namelist="" />
+    </onentry>
+    <transition target="secondmod[5][stops]-final" event="timeout-ssecondmod[5][stops]" />
+    <transition target="ssecondmod[5][stops]-speech[][pararscroll][][][][][][]" event="[][pararScroll][][][][][][]" />
+    <onexit>
+      <cancel sendid="state1-timer-ssecondmod[5][stops]" />
+    </onexit>
+  </state>
+  <state id="secondmod[5][stops]-final">
+    <onentry>
+      <log label="[secondmod[5][stops]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[action][StopS]')}" />
+      <send event="STOPSCROLL" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="ssecondmod[5][stops]-speech[][pararscroll][][][][][][]">
+    <onentry>
+      <log label="[ssecondmod[5][stops]-speech[][pararscroll][][][][][][]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][StopS]')}" />
+      <send event="STOPSCROLL" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
   <state id="sspeech[][rapido][][][][][][]">
     <onentry>
       <log label="[sspeech[][rapido][][][][][][]]" expr="READY" />
@@ -231,6 +320,37 @@
       <assign name="data2" expr="${_eventdata.data}" />
       <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownRapido]')}" />
       <send event="scrollDownRapido" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="sspeech[][devagar][][][][][][]">
+    <onentry>
+      <log label="[sspeech[][devagar][][][][][][]]" expr="READY" />
+      <assign name="data1" expr="${_eventdata.data}" />
+      <send id="state1-timer-sspeech[][devagar][][][][][][]" event="timeout-sspeech[][devagar][][][][][][]" delay="3000" target="" targettype="" namelist="" />
+    </onentry>
+    <transition target="main" event="timeout-sspeech[][devagar][][][][][][]" />
+    <transition target="sspeech[][devagar][][][][][][]-secondmod[4][scrollu]" event="[4][ScrollU]" />
+    <transition target="sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]" event="[3][ScrollDR]" />
+    <onexit>
+      <cancel sendid="state1-timer-sspeech[][devagar][][][][][][]" />
+    </onexit>
+  </state>
+  <state id="sspeech[][devagar][][][][][][]-secondmod[4][scrollu]">
+    <onentry>
+      <log label="[sspeech[][devagar][][][][][][]-secondmod[4][scrollu]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollUpDevagar]')}" />
+      <send event="scrollUpDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]">
+    <onentry>
+      <log label="[sspeech[][devagar][][][][][][]-secondmod[3][scrolldr]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[action][scrollDownDevagar]')}" />
+      <send event="scrollDownDevagar" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>

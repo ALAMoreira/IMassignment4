@@ -34,6 +34,7 @@ namespace AppGui
         private Random rnd = new Random();
         private Thread thread;
         private string direcao;
+        private int velocidade = 1;
 
         private bool orderStart = false;
         private bool pedidoGrupo = false, leaving = false;
@@ -47,7 +48,7 @@ namespace AppGui
             driver = new ChromeDriver();
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
 
-            thread = new Thread(scrollFast);
+            thread = new Thread(scrollSmooth);
             thread.Start();
 
             t = new Tts();
@@ -77,15 +78,31 @@ namespace AppGui
 
             //var com2 = doc.Descendants("mmi:data").FirstOrDefault().Value;
 
-            int sizeJson = com.Split(',').Length - 1;
+            int sizeJson = com.Split(',').Length;
 
             var confirmation = (string)json.recognized[1].ToString();
 
-            //double confidence = double.Parse(json.recognized[2].ToString());
+
 
 
             switch (confirmation) //confimation
             {
+                case "scrollDownRapido":
+                    velocidade = 5;
+                    direcao = "baixo";
+                    break;
+                case "scrollDownDevagar":
+                    velocidade = 1;
+                    direcao = "baixo";
+                    break;
+                case "scrollUpRapido":
+                    velocidade = 5;
+                    direcao = "cima";
+                    break;
+                case "scrollUpDevagar":
+                    velocidade = 1;
+                    direcao = "cima";
+                    break;
                 case "esvaziarC":
                     try
                     {
@@ -163,7 +180,7 @@ namespace AppGui
                     {
                         
                         case "scroll":
-                            scrollFast();
+                            scrollSmooth();
                             break;
                         case "search":
                             if((string)json.recognized[2].ToString()=="")
@@ -517,27 +534,17 @@ namespace AppGui
             }
         }
 
-        private void scrollFast()
+        private void scrollSmooth()
         {
             while (true)
             {
                 if (direcao == "cima")
-                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,-3)", "");
+                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,-"+ velocidade + ")", "");
                 else if (direcao == "baixo")
-                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,3)", ""); 
+                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,"+velocidade+")", ""); 
             }
         }
-
-        private void scrollSlow()
-        {
-            while (true)
-            {
-                if (direcao == "cima")
-                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,-1)", "");
-                else if (direcao == "baixo")
-                    ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0,1)", "");
-            }
-        }
+        
 
         private void changeDate()
         {
