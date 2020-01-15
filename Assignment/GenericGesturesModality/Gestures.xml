@@ -1,0 +1,38 @@
+<!--This XML file contains the gestures of the database.-->
+<Gestures>
+  <Gesture>
+    <ID>0</ID>
+    <NAME>Avancar_Left</NAME>
+    <SEMANTIC>AvancarL</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>1</ID>
+    <NAME>esvaziarCarrinho</NAME>
+    <SEMANTIC>esvaziarC</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>2</ID>
+    <NAME>Recuar_Right</NAME>
+    <SEMANTIC>RecuarR</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>3</ID>
+    <NAME>Scroll_Down_Right</NAME>
+    <SEMANTIC>ScrollDR</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>4</ID>
+    <NAME>Scroll_Up</NAME>
+    <SEMANTIC>ScrollU</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>5</ID>
+    <NAME>StopScroll</NAME>
+    <SEMANTIC>StopS</SEMANTIC>
+  </Gesture>
+  <Gesture>
+    <ID>6</ID>
+    <NAME>verCarrinho</NAME>
+    <SEMANTIC>verC</SEMANTIC>
+  </Gesture>
+</Gestures>

@@ -1,0 +1,24 @@
+﻿<Window x:Class="secondModality.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:secondModality"
+        mc:Ignorable="d"
+        
+ 
+
+    Title="Second Modality" Height="135.868" Width="476.789">
+    
+    <Grid>
+          
+        <StackPanel Margin="20" Orientation="Horizontal">
+            <Button x:Name="b1" Content="RED" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Click="B1_OnClick"/>
+            <Button x:Name="b2" Content="BLUE" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Click="B2_OnClick"/>
+            <Button x:Name="b3" Content="YELLOW" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Click="B3_OnClick"/>
+            <Button x:Name="b4" Content="RECTANGLE YELLOW" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Click="B4_OnClick"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>
