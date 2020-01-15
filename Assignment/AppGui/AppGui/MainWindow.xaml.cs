@@ -36,7 +36,7 @@ namespace AppGui
         private string direcao;
 
         private bool orderStart = false;
-        private bool cartClicked = false, leaving = false;
+        private bool pedidoGrupo = false, leaving = false;
 
         private MmiEventArgs e;
 
@@ -159,7 +159,8 @@ namespace AppGui
                         scrollFast();
                         break;
                     case "search":
-                        t.Speak("O que deseja procurar?");
+                        if ((string)json.recognized[2].ToString() == "")
+                            t.Speak("O que deseja procurar?");
                         break;
                     case "return":
                         homepage();
@@ -212,7 +213,7 @@ namespace AppGui
                         break;
                 }
 
-                string place, restaurante;
+                string place, restaurante, localRestaurante;
                 bool enviar = false, local = false;
 
                 switch ((string)json.recognized[2].ToString()) //restaurants
@@ -220,64 +221,87 @@ namespace AppGui
 
                     case "MCDONALDS":
                         //search mcdonalds
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                        driver.FindElementByXPath("//div[contains(text(), 'Procurar')]/parent::button").Click();
+                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//input[@placeholder='O que deseja?']")));
                         var searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
                         for (int i = 0; i < 20; i++)
                         {
                             searchBox.SendKeys(Keys.Backspace);
                         }
-                        searchBox.SendKeys("mcdonalds ");*/
+                        searchBox.SendKeys("mcdonalds ");
 
-                        restaurante = "mcdonalds ";
+                        /*restaurante = "mcdonalds ";
                         enviar = false; local = false;
-                        procurar(restaurante, enviar, local);
+                        procurar(restaurante, enviar, local);*/
 
                         switch ((string)json.recognized[3].ToString()) //place
                         {
                             case "UNIVERSIDADE":
                                 place = "(Aveiro Universidade)";
-                                /*searchBox.SendKeys("universidade");
-                                searchBox.SendKeys(Keys.Enter);*/
+                                searchBox.SendKeys("universidade");
+                                searchBox.SendKeys(Keys.Enter);
 
                                 //t.Speak("Carregue no botão");
 
-                                /*wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
+                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
+
+                                if (pedidoGrupo == false)
+                                {
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
+                                    driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
+                                    pedidoGrupo = true;
+                                }
+                                /*localRestaurante = "universidade";
                                 enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
+                                procurar(localRestaurante, enviar, local);
+                                verRestaurante(place);*/
                                 break;
                             case "FORUM":
                                 place = "(Aveiro Fórum)";
-                                /*searchBox.SendKeys("fórum");
+                                searchBox.SendKeys("fórum");
                                 searchBox.SendKeys(Keys.Enter);
 
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
+                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
                                 driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
-                                */
+
+                                if (pedidoGrupo == false)
+                                {
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
+                                    driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
+                                    pedidoGrupo = true;
+                                }
+
+                                /*localRestaurante = "fórum";
                                 enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
+                                procurar(localRestaurante, enviar, local);
+                                verRestaurante(place);*/
                                 break;
                             case "GLICINIAS":
                                 place = "(Aveiro Glicinias)";
-                                /*searchBox.SendKeys("glicinias");
+                                searchBox.SendKeys("glicinias");
                                 searchBox.SendKeys(Keys.Enter);
 
-                                wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
+                                driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
+
+                                if (pedidoGrupo == false)
+                                {
+                                    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
+                                    driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
+                                    pedidoGrupo = true;
+                                }
+                                /*localRestaurante = "glicinias";
                                 enviar = true; local = true;
-                                procurar(place, enviar, local);
-                                verRestaurante(place);
+                                procurar(localRestaurante, enviar, local);
+                                verRestaurante(place);*/
                                 break;
                             case "":
-                                place = "";
+                                /*place = "";
                                 enviar = true; local = true;
-                                procurar(place, enviar, local);
+                                procurar(place, enviar, local);*/
                                 //tts escolha a opção desejada
+                                searchBox.SendKeys(Keys.Enter);
                                 break;
                         }
 
@@ -292,7 +316,8 @@ namespace AppGui
 
                         break;
                     case "MONTADITOS":
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                        driver.FindElementByXPath("//div[contains(text(), 'Procurar')]/parent::button").Click();
+                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//input[@placeholder='O que deseja?']")));
                         searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
                         for (int i = 0; i < 20; i++)
                         {
@@ -304,16 +329,23 @@ namespace AppGui
 
                         place = "100 Montaditos";
 
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
-                        place = "100 Montaditos";
+                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
+                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
+
+                        if (pedidoGrupo == false)
+                        {
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
+                            driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
+                            pedidoGrupo = true;
+                        }
+                        /*place = "100 Montaditos";
                         enviar = true; local = false;
                         procurar(place, enviar, local);
-                        verRestaurante(place);
+                        verRestaurante(place);*/
                         break;
                     case "PIZZAHUT":
-                        /*driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
+                        driver.FindElementByXPath("//div[contains(text(), 'Procurar')]/parent::button").Click();
+                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//input[@placeholder='O que deseja?']")));
                         searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
                         for (int i = 0; i < 20; i++)
                         {
@@ -326,14 +358,20 @@ namespace AppGui
 
                         place = "Pizza Hut";
 
-                        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();*/
+                        wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
+                        driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
 
-                        place = "Pizza Hut";
+                        if (pedidoGrupo == false)
+                        {
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
+                            driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
+                            pedidoGrupo = true;
+                        }
+
+                        /*place = "Pizza Hut";
                         enviar = true; local = false;
                         procurar(place, enviar, local);
-                        verRestaurante(place);
+                        verRestaurante(place);*/
                         break;
                 }
 
@@ -402,8 +440,10 @@ namespace AppGui
                 {
                     searchBox.SendKeys(Keys.Backspace);
                 }
-                searchBox.SendKeys(restaurante);
+                
             }
+
+            searchBox.SendKeys(restaurante);
 
             if (enviar == true)
             {
