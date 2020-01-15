@@ -8,10 +8,15 @@ import scxmlgen.interfaces.IModality;
 
 public enum Speech implements IModality{  
 
-	SQUARE("[shape][SQUARE]",1500),
-        TRIANGLE("[shape][TRIANGLE]",1500),
-        CIRCLE("[shape][CIRCLE]",1500);
-
+	mcdonalds("[restaurant][mcdonalds]",1500),
+    montaditos("[restaurant][montaditos]",1500),
+    UNIVERSIDADE("[place][UNIVERSIDADE]",1500),
+	FORUM("[place][FORUM]",1500),
+	GLICINIAS("[place][GLICINIAS]",1500),
+	SIM("[action][SIM]",1500),
+	NAO("[action][NAO]",1500),
+	RECUAR("[action][RECUAR]",1500),
+	AVANCAR("[action][AVANCAR]",1500),;
 
 private String event; 
 private int timeout;
