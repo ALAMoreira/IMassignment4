@@ -47,9 +47,10 @@ namespace AppGui
             driver = new ChromeDriver();
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
 
-            thread = new Thread(scrollSmooth);
+            thread = new Thread(scrollFast);
             thread.Start();
 
+            t = new Tts();
 
             openUberEatsChrome(driver);
 
@@ -115,15 +116,15 @@ namespace AppGui
                 default:
                     break;
             }
+            
+            
 
-            // VOZ ----------------------------------------
-
-            if ((string)json.recognized[1].ToString() == "KEY")
+            if ((string)json.recognized[0].ToString() == "KEY")
             {
                 orderStart = true;
                 t.Speak("Olá! O que gostaria de fazer?");
             }
-            else if ((string)json.recognized[1].ToString() == "EXIT")
+            else if ((string)json.recognized[0].ToString() == "EXIT")
             {
                 t.Speak("Tem a certeza que deseja sair?");
                 leaving = true;
@@ -131,7 +132,7 @@ namespace AppGui
 
             if (leaving == true)
             {
-                confirmation = (string)json.recognized[8].ToString();
+                confirmation = (string)json.recognized[7].ToString();
                 switch (confirmation) //confimation
                 {
                     case "":
@@ -150,12 +151,12 @@ namespace AppGui
 
             if (orderStart)
             {
-                string action;
-                switch ((string)json.recognized[2].ToString())
+               
+                switch ((string)json.recognized[1].ToString())
                 {
 
                     case "scroll":
-                        scrollSmooth();
+                        scrollFast();
                         break;
                     case "search":
                         t.Speak("O que deseja procurar?");
@@ -214,7 +215,7 @@ namespace AppGui
                 string place, restaurante;
                 bool enviar = false, local = false;
 
-                switch ((string)json.recognized[3].ToString()) //restaurants
+                switch ((string)json.recognized[2].ToString()) //restaurants
                 {
 
                     case "MCDONALDS":
@@ -231,7 +232,7 @@ namespace AppGui
                         enviar = false; local = false;
                         procurar(restaurante, enviar, local);
 
-                        switch ((string)json.recognized[4].ToString()) //place
+                        switch ((string)json.recognized[3].ToString()) //place
                         {
                             case "UNIVERSIDADE":
                                 place = "(Aveiro Universidade)";
@@ -280,7 +281,7 @@ namespace AppGui
                                 break;
                         }
 
-                        if ((string)json.recognized[4].ToString() == "")
+                        if ((string)json.recognized[3].ToString() == "")
                         {
                             t.Speak("De qual restaurante?");
                         }
@@ -337,7 +338,7 @@ namespace AppGui
                 }
 
 
-                switch ((string)json.recognized[5].ToString()) //options
+                switch ((string)json.recognized[4].ToString()) //options
                 {
 
                     case "":
@@ -354,13 +355,13 @@ namespace AppGui
                         break;
                 }
 
-                switch ((string)json.recognized[6].ToString()) //food on mcdonalds
+                switch ((string)json.recognized[5].ToString()) //food on mcdonalds
                 {
                     case "":
                         break;
                     default:
 
-                        var food = (string)json.recognized[6].ToString();
+                        var food = (string)json.recognized[5].ToString();
                         //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
                         //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + food + "')]")));
 
@@ -371,12 +372,12 @@ namespace AppGui
                 }
 
                 string itemName = "";
-                switch ((string)json.recognized[7].ToString()) //food options on mcdonalds
+                switch ((string)json.recognized[6].ToString()) //food options on mcdonalds
                 {
                     case "":
                         break;
                     default:
-                        itemName = (string)json.recognized[7].ToString();
+                        itemName = (string)json.recognized[6].ToString();
 
                         foodOptions(itemName);
                         break;
