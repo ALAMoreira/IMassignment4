@@ -26,15 +26,12 @@ public class GenFusionSCXML {
 	
 	
 	fg.Redundancy(Speech.AVANCAR, SecondMod.AvancarL, Output.AVANCAR);
-	fg.Redundancy(Speech.RECUAR, SecondMod.RecuarR, Output.RECUAR);
+	fg.Redundancy(Speech.RECUAR, SecondMod.RecuarR, Output.RECUAR);	
 	
-	fg.Single(Speech.mcdonalds, Output.MCDONALDS);
-	fg.Single(Speech.montaditos, Output.MONTADITOS);
-	
-    fg.Sequence(Speech.mcdonalds, Speech.UNIVERSIDADE, Output.MCDONALDS_UNIVERSIDADE);
-	
-    fg.Complementary(SecondMod.EsvaziarC, Speech.SIM, Output.ESVAZIARC);
-    
+    fg.Complementary(SecondMod.scrollU, Speech.RAPIDO, Output.scrollUpRapido);
+    fg.Complementary(SecondMod.scrollU, Speech.DEVAGAR, Output.scrollUpDevagar);
+    fg.Complementary(SecondMod.scrollDR, Speech.DEVAGAR, Output.scrollDownDevagar);
+    fg.Complementary(SecondMod.scrollDR, Speech.RAPIDO, Output.scrollDownRapido);
 	
     //EXAMPLE
     
