@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using mmisharp;
 using Microsoft.Speech.Recognition;
+using multimodal;
 
 namespace speechModality
 {
@@ -13,6 +14,11 @@ namespace speechModality
         private SpeechRecognitionEngine sre;
         private Grammar gr;
         public event EventHandler<SpeechEventArg> Recognized;
+
+        private Tts t;
+        private string[] commandsNotUnderstand = new string[5];
+        private Random rnd = new Random();
+
         protected virtual void onRecognized(SpeechEventArg msg)
         {
             EventHandler<SpeechEventArg> handler = Recognized;
@@ -45,6 +51,13 @@ namespace speechModality
             sre.SpeechRecognized += Sre_SpeechRecognized;
             sre.SpeechHypothesized += Sre_SpeechHypothesized;
 
+            t = new Tts();
+            commandsNotUnderstand[0] = "Desculpe, pode repetir?";
+            commandsNotUnderstand[1] = "Parece que estou a ficar surda, importa-se de repetir?";
+            commandsNotUnderstand[2] = "Pode repetir o que disse?";
+            commandsNotUnderstand[3] = "Não queria ser inconveniente, mas pode repetir?";
+            commandsNotUnderstand[4] = "Não percebi o que disse.";
+
         }
 
         private void Sre_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
@@ -61,7 +74,6 @@ namespace speechModality
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
             string json = "{ \"recognized\": [";
             //json += "\"" + e.Result.Confidence + "\", ";
-            //if (e.Result.Confidence > 0.65)
             foreach (var resultSemantic in e.Result.Semantics)
             {
                 json+= "\"" + resultSemantic.Value.Value +"\", ";
@@ -71,8 +83,14 @@ namespace speechModality
             // END CHANGED FOR FUSION ---------------------------------------
 
             var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime+"", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration)+"",e.Result.Confidence, json);
-            mmic.Send(exNot);
-            
+            if (e.Result.Confidence > 0.65)
+            {
+                mmic.Send(exNot);
+            }
+            else
+            {
+                t.Speak(commandsNotUnderstand[rnd.Next(0, 5)]);
+            }
         }
     }
 }
