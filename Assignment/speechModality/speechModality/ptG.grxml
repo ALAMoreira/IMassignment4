@@ -136,6 +136,23 @@
         <tag>out="addtocart"</tag>
       </item>
       <item repeat="0-1">
+        <one-of>
+          <item>Remove</item>
+          <item>Remover</item>
+          <item>Apaga</item>
+          <item>Apagar</item>
+          <item>Esvazia</item>
+          <item>Esvaziar</item>
+          <item>Limpa</item>
+          <item>Limpar</item>
+        </one-of>
+        <one-of>
+          <item>o pedido</item>
+          <item>o carrinho</item>
+        </one-of>
+        <tag>out="emptycart"</tag>
+      </item>
+      <item repeat="0-1">
         Tira um<tag>out="reduceitem"</tag>
       </item>
       <item repeat="0-1">

@@ -34,10 +34,11 @@ namespace AppGui
         private Random rnd = new Random();
         private Thread thread;
         private string direcao;
-        private int velocidade = 1;
+        private int velocidade = 1, produtos = 0;
 
         private bool orderStart = false;
-        private bool pedidoGrupo = false, leaving = false;
+        private bool pedidoGrupo = false, leaving = false, esvaziar = false;
+        private string confirmationValue;
 
         private MmiEventArgs e;
 
@@ -74,18 +75,14 @@ namespace AppGui
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
-
-
-            //var com2 = doc.Descendants("mmi:data").FirstOrDefault().Value;
-
             int sizeJson = com.Split(',').Length;
 
-            var confirmation = (string)json.recognized[1].ToString();
+            var gesto = (string)json.recognized[1].ToString();
 
 
 
 
-            switch (confirmation) //confimation
+            switch (gesto) //confimation
             {
                 case "scrollDownRapido":
                     velocidade = 5;
@@ -104,18 +101,29 @@ namespace AppGui
                     direcao = "cima";
                     break;
                 case "esvaziarC":
-                    try
+                    if (orderStart == true)
                     {
-                        esvaziarCarrinho();
+                        if (produtos > 0)
+                        {
+                            verCarrinho();
+                            t.Speak("Tem a certeza que deseja apagar o carrinho de compras?");
+                            esvaziar = true;
+                            try
+                            {
+                                esvaziarCarrinho();
+                            }
+                            catch { }
+                        }
+                        else
+                        {
+                            t.Speak("O carrinho está vazio");
+                        }
                     }
-                    catch { }
                     break;
                 case "RecuarR":
-                    //if (confidence > 0.8)
                     driver.Navigate().Back();
                     break;
                 case "AvancarL":
-                    //if (confidence > 0.8)
                     driver.Navigate().Forward();
                     break;
                 case "StopS":
@@ -128,11 +136,19 @@ namespace AppGui
                     direcao = "cima";
                     break;
                 case "verC":
-                    try
+                    if (produtos > 0)
                     {
-                        verCarrinho();
+                        try
+                        {
+                            verCarrinho();
+                        }
+                        catch { }
+                        t.Speak("Aqui tem o seu carrinho!");
                     }
-                    catch { }
+                    else
+                    {
+                        t.Speak("O carrinho está vazio");
+                    }
                     break;
                 case "homePC":
                     homepage();
@@ -140,8 +156,28 @@ namespace AppGui
                 default:
                     break;
             }
-            
-            if(sizeJson > 3) { 
+
+            confirmationValue = (string)json.recognized[7].ToString();
+            if (esvaziar == true)
+            {
+                switch (confirmationValue) //confimation
+                {
+                    case "":
+                        break;
+                    case "sim":
+                        esvaziarCarrinho();
+                        break;
+                    case "nao":
+                        t.Speak("O carrinho de compras não foi apagado!");
+                        esvaziar = false;
+                        break;
+                    default:
+                        t.Speak("Não percebi");
+                        break;
+                }
+            }
+
+            if (sizeJson > 3) {
 
                 if ((string)json.recognized[0].ToString() == "KEY")
                 {
@@ -154,10 +190,10 @@ namespace AppGui
                     leaving = true;
                 }
 
+                confirmationValue = (string)json.recognized[7].ToString();
                 if (leaving == true)
                 {
-                    confirmation = (string)json.recognized[7].ToString();
-                    switch (confirmation) //confimation
+                    switch (confirmationValue) //confimation
                     {
                         case "":
                             break;
@@ -166,6 +202,7 @@ namespace AppGui
                             break;
                         case "nao":
                             leaving = false;
+                            t.Speak("Ok!");
                             break;
                         default:
                             t.Speak("Não percebi");
@@ -191,57 +228,68 @@ namespace AppGui
                             break;
 
                         case "addtocart":
-                            /*action = "Adiciona";
-                            driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]").Click();
-                            */
                             adicionarCarrinho();
                             t.Speak("Adicionado ao carrinho com sucesso!");
                             break;
 
                         case "changedate":
-                            /*action = "Entregar agora";
-                            //driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
-                            driver.FindElement(By.CssSelector("button[class='ao aq bi bj bk ah b2'")).Click();
-                            action = "Agendar para mais tarde";
-                            driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
-                        
-                            // Adicionar switch para opções
-                            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                            action = "Definir hora de entrega";
-                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(text(), '" + action + "')]")));
-                            driver.FindElementByXPath("//button[contains(text(), '" + action + "')]").Click();
-                            driver.Navigate().Refresh();
-                            */
                             changeDate();
 
                             t.Speak("Ok, a data de entrega foi alterada!");
                             break;
 
                         case "viewcart":
-                            /*//driver.Navigate().Refresh();
-                            cartClicked = !cartClicked;
-                            if (!cartClicked)
+                            if (produtos > 0)
                             {
-                                driver.FindElementByXPath("//button[@aria-label='checkout']").Click();
+                                verCarrinho();
+                                t.Speak("Aqui tem o seu carrinho!");
                             }
-                            */
-                            verCarrinho();
-                            t.Speak("Aqui tem o seu carrinho!");
+                            else
+                            {
+                                t.Speak("O carrinho está vazio");
+                            }
                             break;
                         case "closecart":
-                            //driver.FindElementByCssSelector("button[class='af eh ei ej ek el em ao aq dt b2']").Click();
                             fecharCarrinho();
                             t.Speak("O carrinho foi fechado com sucesso!");
+                            break;
+                        case "emptycart":
+                            if (produtos > 0)
+                            {
+                                verCarrinho();
+                                t.Speak("Tem a certeza que deseja apagar o carrinho de compras?");
+                                esvaziar = true;
+                            }
+                            else
+                            {
+                                t.Speak("O carrinho está vazio");
+                            }
                             break;
                         default:
                             break;
                     }
 
-                    string place, restaurante;
-                    bool enviar = false, local = false;
+                    confirmationValue = (string)json.recognized[7].ToString();
+                    if (esvaziar == true)
+                    {
+                        switch (confirmationValue) //confimation
+                        {
+                            case "":
+                                break;
+                            case "sim":
+                                esvaziarCarrinho();
+                                break;
+                            case "nao":
+                                t.Speak("O carrinho de compras não foi apagado!");
+                                esvaziar = false;
+                                break;
+                            default:
+                                t.Speak("Não percebi");
+                                break;
+                        }
+                    }
 
-                    
-
+                    string place;
                     switch ((string)json.recognized[2].ToString()) //restaurants
                     {
                     case "MCDONALDS":
@@ -255,18 +303,12 @@ namespace AppGui
                         }
                         searchBox.SendKeys("mcdonalds ");
 
-                        /*restaurante = "mcdonalds ";
-                        enviar = false; local = false;
-                        procurar(restaurante, enviar, local);*/
-
                         switch ((string)json.recognized[3].ToString()) //place
                         {
                             case "UNIVERSIDADE":
                                 place = "(Aveiro Universidade)";
                                 searchBox.SendKeys("universidade");
                                 searchBox.SendKeys(Keys.Enter);
-
-                                //t.Speak("Carregue no botão");
 
                                 wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
                                 driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
@@ -277,10 +319,6 @@ namespace AppGui
                                     driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
                                     pedidoGrupo = true;
                                 }
-                                /*localRestaurante = "universidade";
-                                enviar = true; local = true;
-                                procurar(localRestaurante, enviar, local);
-                                verRestaurante(place);*/
                                 break;
                             case "FORUM":
                                 place = "(Aveiro Fórum)";
@@ -296,11 +334,6 @@ namespace AppGui
                                     driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
                                     pedidoGrupo = true;
                                 }
-
-                                /*localRestaurante = "fórum";
-                                enviar = true; local = true;
-                                procurar(localRestaurante, enviar, local);
-                                verRestaurante(place);*/
                                 break;
                             case "GLICINIAS":
                                 place = "(Aveiro Glicinias)";
@@ -316,16 +349,8 @@ namespace AppGui
                                     driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
                                     pedidoGrupo = true;
                                 }
-                                /*localRestaurante = "glicinias";
-                                enviar = true; local = true;
-                                procurar(localRestaurante, enviar, local);
-                                verRestaurante(place);*/
                                 break;
                             case "":
-                                /*place = "";
-                                enviar = true; local = true;
-                                procurar(place, enviar, local);*/
-                                //tts escolha a opção desejada
                                 searchBox.SendKeys(Keys.Enter);
                                 break;
                         }
@@ -363,10 +388,6 @@ namespace AppGui
                             driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
                             pedidoGrupo = true;
                         }
-                        /*place = "100 Montaditos";
-                        enviar = true; local = false;
-                        procurar(place, enviar, local);
-                        verRestaurante(place);*/
                         break;
                     case "PIZZAHUT":
                         driver.FindElementByXPath("//div[contains(text(), 'Procurar')]/parent::button").Click();
@@ -391,11 +412,6 @@ namespace AppGui
                             driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
                             pedidoGrupo = true;
                         }
-
-                        /*place = "Pizza Hut";
-                        enviar = true; local = false;
-                        procurar(place, enviar, local);
-                        verRestaurante(place);*/
                         break;
                     }
 
@@ -424,11 +440,6 @@ namespace AppGui
                         default:
 
                             var food = (string)json.recognized[5].ToString();
-                            //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + food + "')]")));
-
-                            //driver.FindElementByXPath("//*[contains(text(), '" + food + "')]").Click();
-                            //t.Speak("Deseja alterar o seu pedido?");
                             foodRestaurant(food);
                             break;
                     }
@@ -492,6 +503,8 @@ namespace AppGui
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]")));
 
             driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]").Click();
+
+            produtos++;
         }
 
         private void sairAplicacao()
@@ -521,8 +534,6 @@ namespace AppGui
 
         private void esvaziarCarrinho()
         {
-            verCarrinho();
-
             IList<IWebElement> itensCarrinho = driver.FindElementsByXPath("//ul[count(ancestor::*)=count(//div[text()='O seu pedido']/ancestor::*)]/li");
             
             Console.Write("\n\nCOUNT: " + itensCarrinho.Count + "\n\n");
@@ -532,6 +543,10 @@ namespace AppGui
                 var selectElement = new SelectElement(drpCarrinho);
                 selectElement.SelectByValue("0");
             }
+
+            t.Speak("Carrinho de compras apagado com sucesso!");
+
+            produtos = 0;
         }
 
         private void scrollSmooth()
@@ -548,14 +563,10 @@ namespace AppGui
 
         private void changeDate()
         {
-            WebDriverWait wait;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-
             string action = "Entregar agora";
             driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
-            //driver.FindElement(By.CssSelector("button[class='ao aq bi bj bk ah b2'")).Click();
+
             action = "Agendar para mais tarde";
-            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//parent::*[contains(text(), '" + action + "')]")));
             driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "')]").Click();
 
             // Adicionar switch para opções
@@ -575,10 +586,8 @@ namespace AppGui
 
         private void foodOptions(string itemName)
         {
-            //WebDriverWait wait;
             IWebElement element;
 
-            //wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + itemName + "')]")));
 
             element = driver.FindElementByXPath("//*[contains(text(), '" + itemName + "')]");
@@ -586,7 +595,6 @@ namespace AppGui
             System.Threading.Thread.Sleep(500);
 
             driver.FindElementByXPath("//*[contains(text(), '" + itemName + "')]").Click();
-            //driver.FindElementByXPath("//div[contains(text(), '" + itemName + "')]/ancestor::label").Click();
         }
 
         public void openUberEatsChrome(ChromeDriver driver)
@@ -603,89 +611,6 @@ namespace AppGui
             changeDate();
             driver.Manage().Window.Minimize();
             driver.Manage().Window.Maximize();
-            //driver.SwitchTo().Window(driver.WindowHandles.Last());
-            //((IJavaScriptExecutor)driver).ExecuteScript("window.blur();");
-            //((IJavaScriptExecutor)driver).ExecuteScript("window.focus();");
-            
-            /*
-            // 3. Fill shopping cart
-            //driver.FindElementByXPath("//parent::*[contains(text(), 'Procurar')]").Click();
-            driver.FindElementByXPath("//div[contains(text(), 'Procurar')]/parent::button").Click();
-
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//input[@placeholder='O que deseja?']")));
-
-            var searchBox = driver.FindElementByXPath("//input[@placeholder='O que deseja?']");
-            string place = "(Aveiro Universidade)";
-            searchBox.SendKeys("universidade");
-            searchBox.SendKeys(Keys.Enter);
-
-            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='bz c4 bx c0 c3']")));
-            //wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div[class='ds dt du dv dw dx']")));
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div/*[contains(text(), '" + place + "')]")));
-
-            driver.FindElementByXPath("//div/*[contains(text(), '" + place + "')]").Click();
-
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//a[contains(text(), 'Entendido')]")));
-            driver.FindElementByXPath("//a[contains(text(), 'Entendido')]").Click();
-
-
-            string[] food = new string[3];
-            food[0] = "Signature Classic";
-            food[1] = "Chicken Delights";
-            food[2] = "Sundae Morango";
-            //food[3] = "Batatas";
-            //food[4] = "Chicken Bacon";
-
-
-            string itemName;
-            
-            for (int i = 0; i < food.Count(); i++)
-            {
-                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[contains(text(), '" + food[i] + "')]")));
-
-                Console.Write(food[i]);
-
-                driver.FindElementByXPath("//*[contains(text(), '" + food[i] + "')]").Click();
-                switch (i) {
-                    case 1:
-                        itemName = "Sem molho";
-                        foodOptions(driver, itemName);
-                        break;
-                    case 2:
-                        itemName = "Media";
-                        foodOptions(driver, itemName);
-                        break;
-                    case 3:
-                        itemName = "Media";
-                        foodOptions(driver, itemName);
-                        itemName = "Sem molho";
-                        foodOptions(driver, itemName);
-                        break;
-                    default:
-                        break;
-                }
-
-                string action = "Adicionar";
-
-                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]")));
-
-                driver.FindElementByXPath("//parent::*[contains(text(), '" + action + "') and contains(text(), 'ao pedido')]").Click();
-            }
-
-
-            // 4. Close shopping cart
-            fecharCarrinho();
-
-
-            // 5. Homepage
-            homepage();
-            */
-            /*
-            // 6. Clear shopping cart
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//button[@aria-label='checkout']")));
-
-            bool cartClicked = false;
-            esvaziarCarrinho(driver, cartClicked);*/
         }
 
     }
